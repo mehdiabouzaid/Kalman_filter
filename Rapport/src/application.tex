@@ -1,0 +1,20 @@
+\paragraph{}
+	
+	Le suivi d'objet correspond au fait de localiser un objet dans une vidéo ou une séquence d'images. \\
+	
+	Dans les années 1960, le filtre de Kalman a été utilisé pour la première fois lors de la mission Apollo pour estimer la trajectoire de la fusée allant sur la Lune. Ce filtre est aussi utilisé pour corriger la trajectoire de missiles et calculer l'altitude d'une fusée.
+
+	A partir des années 1990, le filtre de Kalman s'est propagé à la société civile avec les GPS\footnote{GPS : Global Positioning System} (système de positionnement global). \\
+
+	Le filtre de Kalman permet également la fusion de données pour avoir une meilleur estimation de chaque donnée. Par exemple, si une voiture est équipée de trois capteurs :
+\begin{itemize}
+\item[•] système de mesure inertiel (IMU\footnote{IMU : Inertial Measurement Unit}) : mesure l'accélération et la vitesse angulaire de la voiture 
+\item[•] Odomètre : donne la position relative de la voiture 
+\item[•] GPS : donne la position absolue de la voiture,
+\end{itemize}	 
+le filtre de Kalman permet de prendre en compte les données de chaque capteur et estimer une position plus précise de la voiture. \\
+
+	Aujourd'hui, il est possible de suivre un ou plusieurs objets dans une vidéo, en temps réel ou non, la position de la caméra étant fixe ou non. Le suivi d'objets est entre autres utilisé dans le domaine de sécurité, la réalité augmentée et le contrôle de la circulation. Si l'objet est détecté, sa position est corrigée sinon elle est prédite. \\
+
+	Dans le cadre de notre étude, nous nous concentrerons uniquement sur le suivi d'objets (tracking). \\
+\indent Vu le délai très court qui nous est imparti, nous n'étudierons le suivi d'un unique objet avec une caméra stationnaire (arrière plan constant).

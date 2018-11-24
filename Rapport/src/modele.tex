@@ -1,0 +1,122 @@
+\subsection{Présentation} 
+
+\indent Le filtre de Kalman est un filtre à réponse impulsionnelle infinie (RII), c’est-à-dire qu'il est basé uniquement sur les valeurs en entrée du filtre ainsi que sur les valeurs antérieures de cette même réponse. Sa fonction est donc d'estimer les états d’un système dynamique à partir d'une série de mesures incomplètes ou bruitées.
+
+Le filtre de Kalman fait appel à la dynamique de la cible qui définit son évolution dans le temps pour obtenir de meilleures données, éliminant ainsi l'effet du bruit. Ces données peuvent être calculées pour faire du filtrage ou pour de la prédiction.
+
+\subsection{Origine}
+
+\indent Le filtre de Kalman a été nommé ainsi, suite à sa conception dans les années 1950 par Rudolf Kalman, mathématicien et automaticien américain d'origine hongroise. Pourtant, dès le XIX\textsuperscript{ème} siècle, Thorvald Nicolai Thiele, astronome danois, puis au XX\textsuperscript{ème} siècle, Peter Swerling, automaticien américain, avaient déjà tous les deux développé un algorithme similaire au filtre de Kalman.
+
+\indent Stanley Schmidt est reconnu comme ayant réalisé la première mise en œuvre du filtre. C'était lors d'une visite de Rudolf Kalman à la NASA Ames Research Center qu'il vit le potentiel de son filtre pour l'estimation de la trajectoire pour le programme Apollo. Ceci a conduit à l'utilisation du filtre dans l'ordinateur de navigation.
+
+\subsection{Fonctionnement}
+
+\indent L'algorithme fonctionne en deux étapes, une étape de prédiction et une étape de mise à jour. La phase de prédiction utilise l'état estimé de l'instant précédent pour produire une estimation de l'état courant. Une fois les observations de l’instant courant obtenues, la seconde phase de mise à jour consiste à apporter une correction de l'état prédit dans le but d'obtenir une estimation plus précise. L'algorithme du filtre de Kalman est un processus dit récursif et markovien. Cela signifie que pour estimer l'état courant, seules l'estimation de l'état précédent et les mesures actuelles sont nécessaires, aucune autre information supplémentaire n’est requise. \\
+
+Le filtre de Kalman est limité aux systèmes linéaires. Cependant, la plupart des systèmes physiques sont non linéaires. Le filtre n'est donc optimal que sur une petite plage linéaire des phénomènes réels. Une grande variété de filtres de Kalman a été depuis développée à partir de la formulation originale dite filtre de Kalman simple. Par exemple, Schmidt a développé le filtre de Kalman étendu, applicable aux phénomènes non linéaires. 
+
+\paragraph{Modèles du filtre}
+~~\\
+\begin{itemize}
+	\item[] Modèle de dynamique ou système : \\
+$x_k=Ax_{k-1}+q$ \\
+$x_k|x_{k-1} \sim  \mathcal{N}(x_k|Ax_{k-1},\,Q)\,$
+	\item[] 
+	\item[] Modèle d'observation : \\
+$y_k=Hx_k+r$ \\
+$y_k|x_k \sim  \mathcal{N}(y_k|Hx_k,\,R)\,$
+\end{itemize}
+
+\paragraph{Distributions des états et des observations}
+~~\\
+\begin{itemize}
+	\item[] Pour les états : \\
+	$P(x_k|y_{1:k-1}) \sim \mathcal{N}(x_k|m_k^-,\,P_k^-)\,$ \\
+	$P(x_k|y_{1:k-1}) \sim \mathcal{N}(x_k|m_k^-,\,P_k^-)\,$
+	\item[]
+	\item[] Pour les observations : \\ 
+	$P(x_k|y_{1:k-1}) \sim \mathcal{N}(x_k|m_k^-,\,P_k^-)\,$
+\end{itemize}
+
+\paragraph{Prédiction}
+~~\\
+\begin{itemize}
+	\item[] Connaissant x[0:k-1] et y[1:k-1], on cherche à estimer x[k] : \\
+	$P(x_k|y_{1:k-1}) \sim \mathcal{N}(x_k|m_k^-,\,P_k^-)\,$
+	\item[] On applique le modèle de dynamique : \\
+	$m_k^- = Am_{k-1}$ \\
+	$P_k^- = AP_{k-1}A^T+Q$ 
+\end{itemize}
+
+\paragraph{Mise à jour} 
+~~\\
+\begin{itemize}
+	\item[] Connaissant x[0:k-1] et y[1:k], on cherche à estimer x[k]: \\
+	$P(x_k|y_{1:k}) \sim \mathcal{N}(x_k|m_k,\,P_k)\,$
+	\item[] On corrige la prédiction de l'étape précédente par l'observation $k$ : \\
+	$v_k=y_k-Hm_k^-$ \\
+	$S_k = HP_k^-H^T+R$ \\
+	$K_k = P_k^-H^TS_k^{-1}$ \\
+	$m_k=m_k^-+K_kv_k$ \\
+	$P_k=P_k^- - K_kS_kK_k^T$ \\
+\end{itemize}
+
+\paragraph{Détail des matrices et vecteurs}
+~~\\
+Nous choisissons le modèle de l'accélération constante au vu des données que avons choisies. \\
+
+Matrice de dynamique/transfert/système
+\[ A=\begin{pmatrix}
+	1 & 0 & dt & 0 & 0 & 0 \\
+	0 & 1 & 0 & dt & 0 & 0 \\
+	0 & 0 & 1 & 0 & dt & 0 \\
+	0 & 0 & 0 & 1 & 0 & dt \\
+	0 & 0 & 0 & 0 & 1 & 0 \\
+	0 & 0 & 0 & 0 & 0 & 1 \\
+\end{pmatrix} \] 
+
+Matrice d'observation
+\[ H= \begin{pmatrix}
+	1 & 0 & 0 & 0 & 0 & 0 \\
+	0 & 1 & 0 & 0 & 0 & 0 \\
+\end{pmatrix} \]
+
+Vecteur d'état
+\[m_k=\begin{pmatrix}
+	x \\
+	y \\
+	\dot{x} \\
+	\dot{y} \\
+	\ddot{x} \\
+	\ddot{y}
+\end{pmatrix}\] 
+
+Bruit de transition
+\[ Q= \begin{pmatrix}
+	a & 0 & 0 & 0 & 0 & 0 \\
+	0 & b & 0 & 0 & 0 & 0 \\
+	0 & 0 & c & 0 & 0 & 0 \\
+	0 & 0 & 0 & d & 0 & 0 \\
+	0 & 0 & 0 & 0 & e & 0 \\
+	0 & 0 & 0 & 0 & 0 & f \\
+\end{pmatrix} \quad \forall a,b,c,d,e,f \in {\rm I\!R} \]
+
+
+Bruit d'observation
+\[ R=\begin{pmatrix}
+	g & 0 \\
+	0 & h \\
+\end{pmatrix} \quad \forall g,h \in {\rm I\!R} \]
+
+Covariance de l'état initial
+\[ p_0= \begin{pmatrix}
+	i & 0 & 0 & 0 & 0 & 0 \\
+	0 & j & 0 & 0 & 0 & 0 \\
+	0 & 0 & k & 0 & 0 & 0 \\
+	0 & 0 & 0 & l & 0 & 0 \\
+	0 & 0 & 0 & 0 & m & 0 \\
+	0 & 0 & 0 & 0 & 0 & n \\
+\end{pmatrix} \quad \forall i,j,k,l,m,n \in {\rm I\!R} \]
+
+

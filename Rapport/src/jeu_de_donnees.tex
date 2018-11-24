@@ -1,0 +1,38 @@
+\subsection{Vidéo 1 : \emph{singleball.mp4}}
+
+Pour notre projet, nous avons utilisé une vidéo nommée \emph{singleball.mp4} trouvée dans les exemples fournis par \emph{Matlab}. La vidéo correspond à une balle verte qui roule sur un sol foncé. Au cours de la vidéo, la balle passe sous une boîte en carton pendant un court instant puis réapparaît de l'autre de celle-ci. Pour faciliter le suivi de l'objet, la caméra est stationnaire (l'arrière-plan ne change pas). \\
+
+Informations concernant la vidéo \emph{singleball.mp4} :
+\begin{itemize}
+\item[] durée : $ 1.5 \; s $
+\item[]	largeur : 480
+\item[] hauteur : 360
+\item[]	nombre d'images par seconde : 30
+\item[] bits par pixel : 24
+\item[] format : RGB24
+\end{itemize}
+
+\subsection{Vidéo 2 : \emph{singleballhomemade.mp4}}
+
+Nous souhaitions tester le code avec une seconde vidéo. Nous avons donc réalisé une vidéo avec la même mise en scène (caméra stationnaire), à savoir une balle qui suit une trajectoire et qui est cachée par un obstacle (un portefeuille dans notre cas) pendant un court instant puis réapparaît de l'autre côté de l'obstacle.  \\
+
+Informations concernant la vidéo \emph{singleballhomemade.mp4} :
+\begin{itemize}
+\item[] durée : $ 3.0420 \ s $
+\item[]	largeur : 1280
+\item[] hauteur : 720
+\item[]	nombre d'images par seconde : 30
+\item[] bits par pixel : 24
+\item[] format : RGB24 \\
+\end{itemize}
+
+\paragraph{}
+Dans les deux vidéos, nous avons donc deux missions :
+	\begin{itemize}
+		\item[•] corriger la position de la balle quand la balle est détectée
+		\item[•] prédire la position de la balle quand elle passe sous la boîte (balle non détectée) \\
+	\end{itemize}
+	
+Nous avons commencé par étudier la vidéo \emph{singleball.mp4}. Le code était donc bien adapté pour cette vidéo. En revanche, lorsque nous avons voulu tester le code avec la vidéo \emph{singleballhomemade.mp4}, nous avons remarqué que le code n'était pas générique et ne fonctionnait donc pas pour cette seconde vidéo. En fait, le traitement d'image ne détectait pas la balle alors qu'elle était visible. \\
+
+Malheureusement, nous n'avons pas eu le temps d'améliorer le code pour qu'il soit adapté à l'autre vidéo.

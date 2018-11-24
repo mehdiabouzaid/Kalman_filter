@@ -1,0 +1,124 @@
+\paragraph{}
+
+	Nous avons trouvé un code\footnote{Code accessible dans /Code/kalmanFilterForTracking.m} \emph{Matlab} sur le site \href{https://fr.mathworks.com/help/vision/examples/using-kalman-filter-for-object-tracking.html}{MathWorks} qui applique un filtre de Kalman sur la vidéo \emph{singleball.mp4} mais cet exemple utilise la \emph{toolbox vision} qui n'est pas accessible sur la version académique de \emph{Matlab} de l'\emph{INSA}. \\
+\indent Nous avons donc décidé de reproduire le code que nous avons trouvé sur ce site pour qu'il fonctionne sur la version académique. Nous avons obtenu le code suivant par nous-même et avec du code trouvé sur internet.
+	
+	Dans ce code, nous avons considéré que la vidéo pouvait contenir l'objet dès la première image, ainsi, nous supposons que nous n'avons pas d'image de la vidéo avec uniquement l'arrière plan. \\
+	
+	Le main se nomme \emph{ProjetTSA.m}. Le code est commenté, ce qui sert également d'explication. \\
+
+\hrule
+\phantom{}
+\phantom{}
+
+	Initialisation/Ré-initialisation du fichier.
+	
+\lstset{caption=ProjetTSA.m}
+\lstinputlisting[firstnumber=1,firstline=1,lastline=4]{../Code/ProjetTSA.m}
+
+\hrule
+\phantom{}
+\phantom{}
+
+	Utilisation de l'entrée standard sur \emph{Matlab} pour permettre à l'utilisateur de choisir la vidéo qu'il souhaite étudier. Cela permet au programme de trouver le chemin vers le répertoire contenant la succession d'images.
+	
+\lstset{caption=ProjetTSA.m}
+\lstinputlisting[firstnumber=6,firstline=6,lastline=29]{../Code/ProjetTSA.m}
+
+\hrule
+\phantom{}
+\phantom{}
+	
+Tout d'abord, nous souhaitons ouvrir la vidéo dans \emph{Matlab}.
+
+\lstset{caption=ProjetTSA.m}
+\lstinputlisting[firstnumber=31,firstline=31,lastline=43]{../Code/ProjetTSA.m}
+
+\hrule
+\phantom{}
+\phantom{}
+
+Malheureusement, sur la version \emph{Matlab} 2017 de \emph{Linux} de l'INSA, la lecture de vidéo n'est pas possible. Nous avons donc sauvegardé chaque image de la vidéo en format \emph{png} et nous avons travaillé sur ces images.
+
+\lstset{caption=ProjetTSA.m}
+\lstinputlisting[firstnumber=45,firstline=45,lastline=53]{../Code/ProjetTSA.m}
+
+\hrule
+
+\subsection{Traitement d'image}
+
+	Pour détecter l'objet, on compare deux images à la fois (l'image courante et l'image suivante). Par conséquent, l'utilisation de la fonction \emph{imabsdiff} peut entraîner l'apparition de deux objets car si l'image à l'instant $ k $ contient l'objet et l'image à l'instant $ k+1 $ contient également l'objet, la valeur absolue de la différence de ces deux images va faire apparaître deux objets. En fait, c'est le même objet à deux instants différents. Ainsi, quand on obtient le centre de masse avec \emph{regionprops}, il peut y avoir un ou deux centres de masse.
+	
+\lstset{caption=ProjetTSA.m}
+\lstinputlisting[firstnumber=55,firstline=55,lastline=96]{../Code/ProjetTSA.m}
+
+\hrule
+\phantom{}
+\phantom{}
+
+	Comme la détection de l'objet est imprécise, la détection du centre de masse l'est aussi. En comparant l'image 1 et l'image 2 (comparaison A) puis l'image 2 et l'image 3 (comparaison B), la détection du centre de masse de l'objet de l'image 2 dans les comparaisons A et B ne sont pas les mêmes (mais proches). Pourtant nous savons qu'il s'agit du même objet au même instant. Le code suivant permet de faire la moyenne des centres de masse lorsqu'il s'agit du même objet au même instant :
+
+\lstset{caption=ProjetTSA.m}
+\lstinputlisting[firstnumber=98,firstline=98,lastline=156]{../Code/ProjetTSA.m}
+
+\hrule
+\phantom{}
+\phantom{}
+
+	On retire les positions \textbf{[ ]} en fin de vidéo car on considère qu'on n'aura pas à prédire ces positions (on considère que l'objet est hors champ de la caméra même si cela n'est pas nécessairement vrai) :
+
+\lstset{caption=ProjetTSA.m}
+\lstinputlisting[firstnumber=158,firstline=158,lastline=168]{../Code/ProjetTSA.m}
+
+\hrule
+\phantom{}
+\phantom{}
+
+	En raison d'imprécisions dans l'analyse d'image, il reste des points très proches mais il s'agit en fait des mêmes points donc nous faisons la moyenne de ces points. Nous avons décidé que si la distance entre deux points est inférieure à $ 3 $ alors il s'agit du même point ($<=3$ choisi de manière empirique).
+
+\lstset{caption=ProjetTSA.m}
+\lstinputlisting[firstnumber=170,firstline=170,lastline=181]{../Code/ProjetTSA.m}
+
+\hrule
+\phantom{}
+\phantom{}
+
+	Affichage des points détectés sur l'image binaire et sur l'image de départ en noir et blanc.
+
+\lstset{caption=ProjetTSA.m}
+\lstinputlisting[firstnumber=183,firstline=183,lastline=213]{../Code/ProjetTSA.m}
+
+\hrule
+
+\subsection{Filtre de Kalman}
+
+	Appel de la fonction \emph{trackingObjet} pour appliquer le filtre de Kalman sur chaque positions de \emph{cell\_pos\_bis}.
+
+\lstset{caption=ProjetTSA.m}
+\lstinputlisting[firstnumber=215,firstline=215,lastline=223]{../Code/ProjetTSA.m}
+
+\hrule
+\phantom{}
+\phantom{}
+
+	Pour tester le filtre de Kalman avec ajustements de la vitesse, de l'accélération et $ dt = \; 1/30 \; s $ il faut dé-commenter les lignes 11 et 15 puis commenter les lignes 10 et 14 dans \emph{trackingObjet.m}. Les lignes 10 et 14 permettent d'appliquer le filtre de Kalman sans ajustement de la vitesse et de l'accélération avec $ dt $ choisi à la ligne 16 ou 21 dans \emph{ProjetTSA.m} selon la vidéo choisie.
+\lstset{caption=trackingObjet.m}
+\lstinputlisting[firstnumber=1,firstline=1,lastline=23]{../Code/trackingObjet.m}
+
+\hrule
+\phantom{}
+\phantom{}
+
+\lstset{caption=kalmanFilter.m}
+\lstinputlisting[firstnumber=1,firstline=1,lastline=49]{../Code/kalmanFilter.m}
+
+\hrule
+\phantom{}
+\phantom{}
+
+	Affichage des résultats :
+	
+\lstset{caption=ProjetTSA.m}
+\lstinputlisting[firstnumber=225,firstline=225,lastline=290]{../Code/ProjetTSA.m}
+
+

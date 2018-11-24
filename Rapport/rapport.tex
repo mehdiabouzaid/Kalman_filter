@@ -1,0 +1,101 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage{classeRapport} % template INSA
+\usepackage{hyperref} % lien tableofcontents + url
+\usepackage{graphicx} % pour les images
+\usepackage{listings} % pour mettre du code
+\usepackage{color} % pour la couleur dans le code
+\usepackage{amsmath} % pour les matrices
+\usepackage{float} % pour le [H] des figures
+
+\hypersetup{ % couleur des liens
+    colorlinks=true,
+    linkcolor=black,
+    filecolor=black,      
+    urlcolor=blue,
+}
+
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+ 
+%%%%
+\definecolor{mygreen}{RGB}{28,172,0} % color values Red, Green, Blue
+\definecolor{mylilas}{RGB}{170,55,241}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    basicstyle=\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2,
+    %%%%
+    language=Matlab,
+    morekeywords={matlab2tikz},
+    keywordstyle=\color{blue},
+    morekeywords=[2]{1}, keywordstyle=[2]{\color{black}},
+    identifierstyle=\color{black},
+    stringstyle=\color{mylilas},
+    commentstyle=\color{mygreen},
+    showstringspaces=false, % without this there will be a symbol in the places where there is a space
+    numberstyle={\tiny \color{black}}, % size of the numbers
+    numbersep=9pt, % this defines how far the numbers are from the text
+    emph=[1]{for,end,break},emphstyle=[1]\color{red}, % some words to emphasise
+}
+
+\lstset{style=mystyle}
+
+\begin{document}
+
+\PageDeGarde
+{Images/TemplateINSA/rien} % image sur la page de garde
+{Filtre de Kalman/Suivi d'objets} % titre principal
+{Mini-projet TSA} % sous-titre
+{Mehdi \textsc{ABOUZAID}\\
+ Damien \textsc{TOOMEY}\\
+ --\\
+ À l'attention de \\ M. \textsc{HÉRAULT}} % nom
+{TSA - ASI - 2017-2018} % bas de page
+
+\Page{INSALogo}{rien.png} % logo de bas de page (en bas a droite)
+
+\newpage
+\tableofcontents
+
+\newpage
+\section{Étude bibliographique sur le modèle}
+\input{src/modele.tex}
+
+\newpage
+\section{Étude bibliographique sur l'application}
+\input{src/application.tex}
+
+\newpage
+\section{Présentation du jeu de données choisi ou construit}
+\input{src/jeu_de_donnees.tex}
+
+\newpage
+\section{Explication de l'implémentation}
+\input{src/explication_implementation.tex}
+
+\newpage
+\section{Choix des hyper-paramètres}
+\input{src/choix_hyperparametres.tex}
+
+\newpage
+\section{Résultats et interprétations \--- singleball.mp4}
+\input{src/resultats_interpretation.tex}
+
+\newpage
+\section{Bibliographie}
+\input{src/bibliographie.tex}
+
+\newpage
+\section{Annexes}
+\input{src/annexes.tex}
+
+\end{document}
+

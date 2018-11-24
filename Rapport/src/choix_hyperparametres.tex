@@ -1,0 +1,39 @@
+\paragraph{}
+
+	Le choix des hyper-paramètres pour le filtre de Kalman est particulièrement difficile. En effet, dans un cas réel, il est difficile de quantifier le bruit (covariance de l'état initial ($p_0$), bruit de transition ($Q$) et bruit d'observation ($R$)). Nous nous sommes donc basés sur les hyper-paramètres choisis dans la vidéo \href{https://fr.mathworks.com/videos/introduction-to-kalman-filters-for-object-tracking-79674.html}{MathWorks} ($5$min$27$s) qui traite \emph{singleball.mp4} avec un filtre de Kalman.
+
+\begin{align*}
+& p_0=100000 \cdot \begin{pmatrix}
+	1 & 0 & 0 & 0 & 0 & 0 \\
+	0 & 1 & 0 & 0 & 0 & 0 \\
+	0 & 0 & 1 & 0 & 0 & 0 \\
+	0 & 0 & 0 & 1 & 0 & 0 \\
+	0 & 0 & 0 & 0 & 1 & 0 \\
+	0 & 0 & 0 & 0 & 0 & 1 \\
+\end{pmatrix} \quad
+& Q=100000 \cdot \begin{pmatrix}
+	25 & 0 & 0 & 0 & 0 & 0 \\
+	0 & 25 & 0 & 0 & 0 & 0 \\
+	0 & 0 & 10 & 0 & 0 & 0 \\
+	0 & 0 & 0 & 10 & 0 & 0 \\
+	0 & 0 & 0 & 0 & 1 & 0 \\
+	0 & 0 & 0 & 0 & 0 & 1 \\
+\end{pmatrix} \quad
+& R=\begin{pmatrix}
+	25 & 0 \\
+	0 & 25 \\
+\end{pmatrix}
+\end{align*}
+
+	Nous avons rencontré un problème lors de la définition de la matrice de transition $A$.
+	
+\[A=\begin{pmatrix}
+	1 & 0 & dt & 0 & 0 & 0 \\
+	0 & 1 & 0 & dt & 0 & 0 \\
+	0 & 0 & 1 & 0 & dt & 0 \\
+	0 & 0 & 0 & 1 & 0 & dt \\
+	0 & 0 & 0 & 0 & 1 & 0 \\
+	0 & 0 & 0 & 0 & 0 & 1 \\
+\end{pmatrix}\]
+
+	Pour la vidéo \emph{singleball.mp4} par exemple, une des caractéristiques de cette vidéo était $ 30 \; images/seconde $. Nous pensions alors que $ dt = 1/30 \; s $ mais cela donnait des résultats erronés. Nous avons alors mis $ dt = 1 \; s $ et les résultats étaient satisfaisants. Finalement, nous avons choisi $ dt = 1.2 \; s $. Malheureusement, nous ne comprenons pas pourquoi cette valeur de $ dt $ permet de mieux paramétrer le filtre.
